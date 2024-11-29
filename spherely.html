@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>إنشاء حساب جديد</title>
+  <style>
+    body { font-family: Arial, sans-serif; text-align: center; margin-top: 50px; background-color: #f0f2f5; }
+    .container { max-width: 400px; margin: 50px auto; background: #fff; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); padding: 20px; }
+    h1 { font-size: 32px; color: #42b72a; font-weight: bold; margin-bottom: 20px; }
+    input { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ddd; border-radius: 4px; }
+    button { width: 100%; padding: 10px; background: #42b72a; color: white; border: none; border-radius: 4px; font-size: 16px; cursor: pointer; }
+    button:hover { background: #36a420; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>إنشاء حساب جديد</h1>
+    <input type="text" id="new-username" placeholder="اسم المستخدم" required>
+    <input type="password" id="new-password" placeholder="كلمة المرور" required>
+    <input type="password" id="confirm-password" placeholder="تأكيد كلمة المرور" required>
+    <button onclick="createAccount()">إنشاء الحساب</button>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+    import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCe4nIbSuyN6sHEFvfpdRbzyILyr-zVhKo",
+      authDomain: "chat-mad-4ec6d.firebaseapp.com",
+      databaseURL: "https://chat-mad-4ec6d-default-rtdb.firebaseio.com",
+      projectId: "chat-mad-4ec6d",
+      storageBucket: "chat-mad-4ec6d.firebasestorage.app",
+      messagingSenderId: "133266731034",
+      appId: "1:133266731034:web:3540d3b2f20c2e3225a1a3",
+      measurementId: "G-12J0W1SW14"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const database = getDatabase(app);
+
+    function createAccount() {
+      const username = document.getElementById('new-username').value;
+      const password = document.getElementById('new-password').value;
+      const confirmPassword = document.getElementById('confirm-password').value;
+
+      if (password !== confirmPassword) {
+        alert('كلمات المرور غير متطابقة');
+        return;
+      }
+
+      const userRef = ref(database, 'users/' + username);
+      set(userRef, {
+        username: username,
+        password: password
+      }).then(() => {
+        alert('تم التسجيل بنجاح!');
+        window.location.href = 'spherely.html'; // توجيه المستخدم إلى صفحة "spherely"
+      }).catch((error) => {
+        console.error(error);
+        alert('حدث خطأ أثناء إنشاء الحساب');
+      });
+    }
+  </script>
+
+</body></html>
